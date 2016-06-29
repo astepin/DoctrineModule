@@ -59,13 +59,6 @@ class CliControllerTest extends AbstractConsoleControllerTestCase
         $this->assertMatchedRouteName('doctrine_cli');
     }
 
-    public function testNonZeroExitCode()
-    {
-        $this->dispatch(new Request(array('scriptname.php', 'fail')));
-
-        $this->assertNotResponseStatusCode(0);
-    }
-
     public function testException()
     {
         $this->dispatch(new Request(array('scriptname.php', '-q', 'fail', '--exception')));

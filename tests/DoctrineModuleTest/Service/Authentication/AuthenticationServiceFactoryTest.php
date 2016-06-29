@@ -58,7 +58,7 @@ class AuthenticationServiceFactoryTest extends BaseTestCase
         $serviceManager->setFactory('doctrine.authenticationadapter.' . $name, new AdapterFactory($name));
         $serviceManager->setFactory('doctrine.authenticationstorage.' . $name, new StorageFactory($name));
 
-        $authenticationService = $factory->createService($serviceManager);
+        $authenticationService = $factory($serviceManager, '');
         $this->assertInstanceOf('Zend\Authentication\AuthenticationService', $authenticationService);
     }
 }

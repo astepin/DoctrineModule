@@ -53,7 +53,7 @@ class StorageFactoryTest extends BaseTestCase
             )
         );
 
-        $adapter = $factory->createService($serviceManager);
+        $adapter = $factory($serviceManager, '');
         $this->assertInstanceOf('DoctrineModule\Authentication\Storage\ObjectRepository', $adapter);
     }
 
@@ -84,7 +84,7 @@ class StorageFactoryTest extends BaseTestCase
 
         $this->assertInstanceOf(
             'DoctrineModule\Authentication\Storage\ObjectRepository',
-            $factory->createService($serviceLocator)
+            $factory($serviceLocator, '')
         );
     }
 }

@@ -22,6 +22,7 @@ use PHPUnit_Framework_TestCase;
 use Symfony\Component\Console\Application;
 use Zend\Console\Request;
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
+use Zend\Mvc\Console\Router\RouteMatch;
 
 /**
  * Tests for {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}
@@ -49,7 +50,7 @@ class SymfonyCliTest extends PHPUnit_Framework_TestCase
     public function testMatching()
     {
         $this->assertInstanceOf(
-            'Zend\Mvc\Router\Console\RouteMatch',
+            RouteMatch::class,
             $this->route->match(new Request(array('scriptname.php', 'list')))
         );
     }
@@ -57,7 +58,7 @@ class SymfonyCliTest extends PHPUnit_Framework_TestCase
     public function testMatchingWithParams()
     {
         $this->assertInstanceOf(
-            'Zend\Mvc\Router\Console\RouteMatch',
+            RouteMatch::class,
             $this->route->match(new Request(array('scriptname.php', 'list', '--help')))
         );
     }

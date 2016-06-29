@@ -20,11 +20,14 @@
 namespace DoctrineModule\Service;
 
 use Doctrine\Common\Cache\CacheProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use RuntimeException;
 use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\MemcachedCache;
 use Doctrine\Common\Cache\RedisCache;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * Cache ServiceManager factory
@@ -37,15 +40,28 @@ class CacheFactory extends AbstractFactory
 {
     /**
      * {@inheritDoc}
-     *
-     * @return \Doctrine\Common\Cache\Cache
-     *
-     * @throws RuntimeException
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function getOptionsClass()
+    {
+        return 'DoctrineModule\Options\Cache';
+    }
+
+    /**
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string $requestedName
+     * @param  null|array $options
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         /** @var $options \DoctrineModule\Options\Cache */
-        $options = $this->getOptions($serviceLocator, 'cache');
+        $options = $this->getOptions($container, 'cache');
         $class   = $options->getClass();
 
         if (!$class) {
@@ -54,8 +70,8 @@ class CacheFactory extends AbstractFactory
 
         $instance = $options->getInstance();
 
-        if (is_string($instance) && $serviceLocator->has($instance)) {
-            $instance = $serviceLocator->get($instance);
+        if (is_string($instance) && $container->has($instance)) {
+            $instance = $container->get($instance);
         }
 
         switch ($class) {
@@ -88,13 +104,5 @@ class CacheFactory extends AbstractFactory
         }
 
         return $cache;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOptionsClass()
-    {
-        return 'DoctrineModule\Options\Cache';
     }
 }

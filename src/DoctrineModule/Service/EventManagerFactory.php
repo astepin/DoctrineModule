@@ -19,11 +19,10 @@
 
 namespace DoctrineModule\Service;
 
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
-use DoctrineModule\Service\AbstractFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory responsible for creating EventManager instances
@@ -31,20 +30,25 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class EventManagerFactory extends AbstractFactory
 {
     /**
-     * {@inheritDoc}
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string $requestedName
+     * @param  null|array $options
+     * @return object
      */
-    public function createService(ServiceLocatorInterface $sl)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         /** @var $options \DoctrineModule\Options\EventManager */
-        $options      = $this->getOptions($sl, 'eventmanager');
+        $options      = $this->getOptions($container, 'eventmanager');
         $eventManager = new EventManager();
 
         foreach ($options->getSubscribers() as $subscriberName) {
             $subscriber = $subscriberName;
 
             if (is_string($subscriber)) {
-                if ($sl->has($subscriber)) {
-                    $subscriber = $sl->get($subscriber);
+                if ($container->has($subscriber)) {
+                    $subscriber = $container->get($subscriber);
                 } elseif (class_exists($subscriber)) {
                     $subscriber = new $subscriber();
                 }

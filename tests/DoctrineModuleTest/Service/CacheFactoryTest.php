@@ -51,21 +51,21 @@ class CacheFactoryTest extends BaseTestCase
         );
 
         /* @var $service \Doctrine\Common\Cache\ArrayCache */
-        $service = $factory->createService($serviceManager);
+        $service = $factory($serviceManager, '');
 
         $this->assertInstanceOf('Doctrine\\Common\\Cache\\ArrayCache', $service);
         $this->assertSame('bar', $service->getNamespace());
     }
 
     /**
-     * @covers \DoctrineModule\Service\CacheFactory::createService
+     * @covers \DoctrineModule\Service\CacheFactory::_invoke
      * @group 547
      */
     public function testCreateZendCache()
     {
         $factory        = new CacheFactory('phpunit');
         $serviceManager = new ServiceManager();
-        $serviceManager->setAlias('Config', 'Configuration');
+        $serviceManager->setAlias('config', 'Configuration');
         $serviceManager->setService(
             'Configuration',
             [
@@ -89,7 +89,7 @@ class CacheFactoryTest extends BaseTestCase
         );
         $serviceManager->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
 
-        $cache = $factory->createService($serviceManager);
+        $cache = $factory($serviceManager, '');
 
         $this->assertInstanceOf('DoctrineModule\Cache\ZendStorageCache', $cache);
     }
@@ -111,11 +111,12 @@ class CacheFactoryTest extends BaseTestCase
                     ],
                 ],
             ]
-        )->setService(
+        );
+        $serviceManager->setService(
             'my_predis_alias',
             $this->getMock('Predis\ClientInterface')
         );
-        $cache = $factory->createService($serviceManager);
+        $cache = $factory($serviceManager, '');
 
         $this->assertInstanceOf('Doctrine\Common\Cache\PredisCache', $cache);
     }

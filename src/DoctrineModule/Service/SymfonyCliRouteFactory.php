@@ -20,8 +20,8 @@
 namespace DoctrineModule\Service;
 
 use DoctrineModule\Mvc\Router\Console\SymfonyCli;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Factory responsible of instantiating {@see \DoctrineModule\Mvc\Router\Console\SymfonyCli}
@@ -29,13 +29,18 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class SymfonyCliRouteFactory implements FactoryInterface
 {
     /**
-     * {@inheritDoc}
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string $requestedName
+     * @param  null|array $options
+     * @return object
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         /* @var $serviceLocator \Zend\ServiceManager\AbstractPluginManager */
         /* @var $application \Symfony\Component\Console\Application */
-        $application = $serviceLocator->getServiceLocator()->get('doctrine.cli');
+        $application = $container->get('doctrine.cli');
 
         return new SymfonyCli(
             $application,

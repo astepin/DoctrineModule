@@ -19,9 +19,9 @@
 namespace DoctrineModule\Mvc\Router\Console;
 
 use Symfony\Component\Console\Application;
-use Zend\Mvc\Router\Console\RouteInterface;
+use Zend\Mvc\Console\Router\RouteInterface;
 use Zend\Stdlib\RequestInterface as Request;
-use Zend\Mvc\Router\Console\RouteMatch;
+use Zend\Mvc\Console\Router\RouteMatch;
 use Zend\Console\Request as ConsoleRequest;
 
 /**

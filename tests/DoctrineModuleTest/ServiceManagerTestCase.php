@@ -60,9 +60,9 @@ class ServiceManagerTestCase
     {
         $configuration  = $configuration ?: static::getConfiguration();
         $serviceManager = new ServiceManager(
-            new ServiceManagerConfig(
+            (new ServiceManagerConfig(
                 isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
-            )
+            ))->toArray()
         );
 
         $serviceManager->setService('ApplicationConfig', $configuration);

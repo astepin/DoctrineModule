@@ -19,8 +19,8 @@
 
 namespace DoctrineModule\Service;
 
+use Interop\Container\ContainerInterface;
 use RuntimeException;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Cache\Storage\StorageInterface;
 use DoctrineModule\Cache\ZendStorageCache;
 
@@ -34,14 +34,17 @@ use DoctrineModule\Cache\ZendStorageCache;
 class ZendStorageCacheFactory extends CacheFactory
 {
     /**
-     * {@inheritDoc}
-     * @return ZendStorageCache
-     * @throws RuntimeException
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string $requestedName
+     * @param  null|array $options
+     * @return object
      */
-    public function createService(ServiceLocatorInterface $sl)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         /** @var $options \DoctrineModule\Options\Cache */
-        $options  = $this->getOptions($sl, 'cache');
+        $options  = $this->getOptions($container, 'cache');
         $instance = $options->getInstance();
 
         if (!$instance) {
@@ -49,14 +52,14 @@ class ZendStorageCacheFactory extends CacheFactory
             throw new RuntimeException('ZendStorageCache must have a referenced cache instance');
         }
 
-        $cache = $sl->get($instance);
+        $cache = $container->get($instance);
 
         if (!$cache instanceof StorageInterface) {
             throw new RuntimeException(
                 sprintf(
                     'Retrieved storage "%s" is not a Zend\Cache\Storage\StorageInterface instance, %s found',
                     $instance,
-                    is_object($cache) ? get_class($cache) : getType($cache)
+                    is_object($cache) ? get_class($cache) : gettype($cache)
                 )
             );
         }

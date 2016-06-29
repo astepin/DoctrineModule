@@ -18,6 +18,8 @@
  */
 return array(
     'modules' => array(
+        'Zend\Router',
+        'Zend\Mvc\Console',
         'DoctrineModule',
     ),
     'module_listener_options' => array(

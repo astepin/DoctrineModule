@@ -59,6 +59,7 @@ class ObjectRepository extends AbstractAdapter
 
     /**
      * @param  array|AuthenticationOptions $options
+     * @return $this
      */
     public function setOptions($options)
     {

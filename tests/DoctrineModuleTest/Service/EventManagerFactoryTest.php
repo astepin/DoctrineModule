@@ -49,8 +49,8 @@ class EventManagerFactoryTest extends BaseTestCase
             )
         );
 
-        /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->createService($serviceManager);
+        /** @var \Doctrine\Common\EventManager $eventManager */
+        $eventManager = $factory($serviceManager, '');
         $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
 
         $listeners = $eventManager->getListeners('dummy');
@@ -78,8 +78,8 @@ class EventManagerFactoryTest extends BaseTestCase
             )
         );
 
-        /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->createService($serviceManager);
+        /** @var \Doctrine\Common\EventManager  $eventManager */
+        $eventManager = $factory($serviceManager, '');
         $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
 
         $listeners = $eventManager->getListeners();
@@ -110,8 +110,8 @@ class EventManagerFactoryTest extends BaseTestCase
             )
         );
 
-        /* $var $eventManager \Doctrine\Common\EventManager */
-        $eventManager = $factory->createService($serviceManager);
+        /** @var \Doctrine\Common\EventManager $eventManager */
+        $eventManager = $factory($serviceManager, '');
         $this->assertInstanceOf('Doctrine\Common\EventManager', $eventManager);
 
         $listeners = $eventManager->getListeners();
@@ -141,6 +141,6 @@ class EventManagerFactoryTest extends BaseTestCase
         );
 
         $this->setExpectedException('InvalidArgumentException');
-        $factory->createService($serviceManager);
+        $factory($serviceManager, '');
     }
 }
